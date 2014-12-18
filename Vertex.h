@@ -11,11 +11,15 @@ class Vertex {
 		int num;
 		vector<int> edges;
 	public:
+		// constructers + getters
 		Vertex();
 		Vertex(int n);
 		int getNum();
 		vector<int> getEdges();
 		void addEdge(int e);
+
+		// used to know if a Vertex with num = n is into edges
+		bool isLinked(int n);
 
 };
 

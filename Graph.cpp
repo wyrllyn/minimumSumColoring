@@ -2,7 +2,7 @@
 
 
 Graph::Graph() {
-
+	size = 0;
 }
 
 Graph::Graph(string filename) {
@@ -83,8 +83,9 @@ void Graph::removeVertex(Vertex v) {
 		}
 	}
 	graph.erase(graph.begin()+index);
+	
 }
 
 int Graph::getSize() {
-	return size;
+	return graph.size();
 }

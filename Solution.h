@@ -10,11 +10,15 @@ class Solution {
 		Solution();
 		vector<Graph *> getSol();
 		int colors();
-		int cost();
+		float cost();
 		void addGraph(Graph * g);
 		void removeGraph(Graph* g);
 
-		void initialisation();
+		void initialisation(Graph g);
+
+		bool isInto(int num);
+
+		bool solutionOk(Graph* g);
 };
 
 
