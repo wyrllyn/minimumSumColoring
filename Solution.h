@@ -8,6 +8,7 @@ class Solution {
 		vector<Graph *> sol;
 	public:
 		Solution();
+		Solution(const Solution& s);
 		vector<Graph *> getSol();
 		int colors();
 		float cost();
@@ -18,7 +19,7 @@ class Solution {
 
 		bool isInto(int num);
 
-		bool solutionOk(Graph* g);
+		bool solutionOk(Graph g);
 };
 
 

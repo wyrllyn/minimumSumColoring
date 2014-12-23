@@ -8,6 +8,13 @@ vector<Graph *> Solution::getSol() {
 	return sol;
 }
 
+Solution::Solution(const Solution& s) {
+	for (int i = 0; i < s.sol.size(); i++) {
+		Graph * g = new Graph(*s.sol[i]);
+		addGraph(g);
+	}
+}
+
 
 int Solution::colors() {
 	return sol.size();
@@ -54,12 +61,20 @@ bool Solution::isInto(int num) {
 	return false;
 }
 
-// used to know if all vertices are in Solution
-bool Solution::solutionOk(Graph* g) {
-	for (int i = 0; i < g->getSize(); i++) {
-		if (!isInto(g->getGraph()[i]->getNum())){
+// used to know if all vertices are in Solution and for the cardinality 
+bool Solution::solutionOk(Graph g) {
+	for (int i = 0; i < g.getSize(); i++) {
+		if (!isInto(g.getGraph()[i]->getNum())){
 			return false;
 		}
+	}
+	for (int i = 0; i < sol.size() - 1 ; i++) {
+		for (int j = i+1; j < sol.size() ; j++ ) {
+			if (sol[i]->getSize() < sol[j]->getSize()) {
+				return false;
+			}
+		}
+
 	}
 	return true;
 }

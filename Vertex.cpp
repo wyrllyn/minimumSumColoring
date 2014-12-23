@@ -9,6 +9,12 @@ Vertex::Vertex(int n) {
 	num = n;
 }
 
+Vertex::Vertex(const Vertex& v):num(v.num) {
+	for (int i = 0; i < v.edges.size(); i++) {
+		addEdge(v.edges[i]);
+	}
+}
+
 
 int Vertex::getNum() {
 	return num;

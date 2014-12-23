@@ -15,6 +15,7 @@ class Graph {
 	public:
 		Graph();
 		Graph(string filename);
+		Graph(const Graph& g);
 		vector<Vertex*> getGraph();
 		void addVertex(Vertex * v);
 		void removeVertex(Vertex v);

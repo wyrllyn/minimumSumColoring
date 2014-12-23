@@ -14,6 +14,7 @@ class Vertex {
 		// constructers + getters
 		Vertex();
 		Vertex(int n);
+		Vertex(const Vertex& v);
 		int getNum();
 		vector<int> getEdges();
 		void addEdge(int e);

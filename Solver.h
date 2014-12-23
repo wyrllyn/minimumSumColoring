@@ -12,6 +12,7 @@ class Solver {
 		Solver(string filename);
 		Graph getCompleteGraph();
 		Solution getSolu();
+		void test();
 
 };
 

@@ -5,6 +5,13 @@ Graph::Graph() {
 	size = 0;
 }
 
+Graph::Graph(const Graph& g) : size(g.size) {
+    for(int i = 0; i < g.graph.size(); i++) {
+            Vertex * v = new Vertex(*g.graph[i]);
+            addVertex(v);
+    }
+}
+
 Graph::Graph(string filename) {
 	//TODO: implement it
 	ifstream file(filename.c_str(), ios::in); 
