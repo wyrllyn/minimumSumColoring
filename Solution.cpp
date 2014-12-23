@@ -9,6 +9,7 @@ vector<Graph *> Solution::getSol() {
 }
 
 Solution::Solution(const Solution& s) {
+
 	for (int i = 0; i < s.sol.size(); i++) {
 		Graph * g = new Graph(*s.sol[i]);
 		addGraph(g);
@@ -99,14 +100,12 @@ void Solution::swapGraph(int index1, int index2) {
 
 }
 
-void Solution::moveVertex(int numVertex) {
+int Solution::moveVertex(int numVertex) {
 
-	cout<< "colors k = "  <<sol.size() << endl;
-	cout<< "sum = " << cost() << endl;
 	// remove from appropriate graph a
 	int indexa= indexGraph(numVertex);
 	int indexb = -1;
-		//cout << index << endl;
+	//cout << "index a" << indexa << endl;
 	int tempIndex = sol[indexa]->getIndexVertex(numVertex);
 	Vertex * toMove = new Vertex(*sol[indexa]->getGraph()[tempIndex]);
 		//cout << toMove->getNum() << " = tomove " << endl;
@@ -121,16 +120,9 @@ void Solution::moveVertex(int numVertex) {
 	sol[indexa]->removeVertex(numVertex);
 //	cout << "2- size indexa : " << sol[indexa]->getSize() << endl;
 
-	// PROBLEM WITH REMOVE VERTEX OR TEMPINDEX 
-	/////////////////////////////////////////
-	/////////////////////////////////////////////
-	////////////////////////////////////////////
-	//////////////////////////////////////////
-	// 5 must not be printed, should be 1
-
-	for (int i = 0 ; i < sol[indexa]->getSize(); i++) {
+/*	for (int i = 0 ; i < sol[indexa]->getSize(); i++) {
 		cout << "  " << sol[indexa]->getGraph()[i]->getNum()<< endl;
-	}
+	}*/
 	//iterative verification - find a correct graph b
 	for (int i = 0; i < sol.size(); i++) {
 		if (sol[i]->canBeAdded(numVertex) && i!=indexa) {
@@ -139,11 +131,13 @@ void Solution::moveVertex(int numVertex) {
 		}
 	}
 	if (indexb == -1) {
-		cout << " WARNING : CHECK moveVertex method into Solution class" << endl;
+		//cout << " WARNING : CHECK moveVertex method into Solution class" << endl;
+		sol[indexa]->addVertex(toMove);
+		return 0;
 	}
 
-	cout << "graph a : " << indexa << endl;
-	cout << "graph b : " << indexb << endl;
+//	cout << "graph a : " << indexa << endl;
+//	cout << "graph b : " << indexb << endl;
 /*	cout << "index graph(1)" << indexGraph(1) << endl;
 	cout << "A2 res is into 1 : " << isInto(1) << endl;*/
 	// add into another graph b
@@ -158,14 +152,10 @@ void Solution::moveVertex(int numVertex) {
 
 	// verif of graph a size (same as below)	
 	// verification of graph b size compare to his neighbors -> if not ok, find the right index and swap
-	if (!rightPlace(indexb)) {
-		cout << "MOVE IT B : " << indexPlace(indexb)  << endl;
-		swapGraph(indexb, indexPlace(indexb));
+	if (!rightPlace(indexb) || !rightPlace(indexa)) {
+		order();
 	}
-	if (!rightPlace(indexa)) {
-		cout << "MOVE IT A : " << indexPlace(indexa) << endl;
-		swapGraph(indexa, indexPlace(indexa));
-	}
+	return 1;
 }
 
 int Solution::indexGraph(int numVertex) {
@@ -240,4 +230,14 @@ void Solution::printSizes() {
 		cout << " " << sol[i]->getSize();
 	}
 	cout << endl;
+}
+
+void Solution::order() {
+	for (int i = 0; i < sol.size() - 1; i++) {
+		for (int j = i+1 ; j < sol.size(); j++) {
+			if(sol[i]->getSize() < sol[j]->getSize()) {
+				swapGraph(i,j);
+			}
+		}
+	}
 }

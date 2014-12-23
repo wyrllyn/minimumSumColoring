@@ -31,7 +31,7 @@ class Solution {
 
 		void swapGraph(int index1, int index2);
 
-		void moveVertex(int numVertex);
+		int moveVertex(int numVertex);
 
 		int indexGraph(int numVertex);
 
@@ -40,6 +40,8 @@ class Solution {
 		int indexPlace(int index);
 
 		void printSizes();
+
+		void order();
 };
 
 

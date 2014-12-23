@@ -51,13 +51,25 @@ void Solver::test() {
 	*/
 	//cout << solu.solutionOk(completeGraph) << endl;
 	//completeGraph.printGraph();
+	//srand(time(NULL));
 
-	for (int i = 0; i < 10 ; i++) {
-		int random = rand() % completeGraph.getSize() ;
-		solu.moveVertex(random);
-		solu.printSizes();
+	cout<< "colors k = "  <<solu.getSol().size() << endl;
+	cout<< "sum = " << solu.cost() << endl;
+
+	for (int i = 0; i < 5000 ; i++) {
+		int random = rand() % completeGraph.getSize() + 1 ;
+	//	cout << "i= " << i <<  " rand = " << random << endl;
+		if (solu.moveVertex(random) == 0) {
+			cout << "i = " << i << endl;
+			break;
+		}
+		//solu.printSizes();
+		//solu.solutionOk(completeGraph);
 	}
 
 	solu.solutionOk(completeGraph);
+	solu.printSizes();
+	cout<< "colors k = "  <<solu.getSol().size() << endl;
+	cout<< "sum = " << solu.cost() << endl;
 
 }
