@@ -88,6 +88,7 @@ void Graph::addVertex(Vertex * v) {
 
 
 //TODO: test
+// removes vertex num = v
 void Graph::removeVertex(int v) {
 	int index = 0;
 	for (int i = 0; i < graph.size(); i++) {

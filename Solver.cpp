@@ -52,20 +52,12 @@ void Solver::test() {
 	//cout << solu.solutionOk(completeGraph) << endl;
 	//completeGraph.printGraph();
 
-	cout<< "colors k = "  <<solu.getSol().size() << endl;
-	cout<< "sum = " << solu.cost() << endl;
+	for (int i = 0; i < 10 ; i++) {
+		int random = rand() % completeGraph.getSize() ;
+		solu.moveVertex(random);
+		solu.printSizes();
+	}
 
-	solu.moveVertex(5);
-	solu.printSizes();
-	solu.moveVertex(4);
-	solu.printSizes();
-	solu.moveVertex(28);
-	solu.printSizes();
-	solu.moveVertex(105);
-	solu.printSizes();
-	// PROBLEM UNDER : MISSING NODES ? oO
-	solu.moveVertex(5);
-	solu.printSizes();
 	solu.solutionOk(completeGraph);
 
 }

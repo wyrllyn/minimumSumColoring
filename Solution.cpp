@@ -60,6 +60,7 @@ void Solution::initialisation(Graph g) {
 bool Solution::isInto(int num) {
 	for (int i = 0; i < sol.size(); i++) {
 		for (int j = 0; j < sol[i]->getSize(); j++) {
+			//cout << "isInto num tested : " << num << endl;
 			if (sol[i]->getGraph()[j]->getNum() == num) {
 				return true;
 			}
@@ -72,7 +73,7 @@ bool Solution::isInto(int num) {
 bool Solution::solutionOk(Graph g) {
 	for (int i = 0; i < g.getSize(); i++) {
 		if (!isInto(g.getGraph()[i]->getNum())){
-			cerr << "F1: missing Node(s)" <<endl;
+			cerr << "F1: missing Node(s) : " << g.getGraph()[i]->getNum() <<endl;
 			return false;
 		}
 	}
@@ -112,11 +113,27 @@ void Solution::moveVertex(int numVertex) {
 	// remove
 		/*cout << "verif sizes :" << endl;
 		cout << sol[indexa]->getSize() << endl;*/
-	sol[indexa]->removeVertex(tempIndex);
-		//cout << sol[indexa]->getSize() << endl;
+/*	cout << "A res is into 1 : " << isInto(1) << endl;
+	cout << "index graph(1)" << indexGraph(1) << endl;
+	cout << " temp index : " << tempIndex << endl;
+	cout << "num to Move : " << toMove->getNum() << endl;*/
+//	cout << "1 -size indexa : " << sol[indexa]->getSize() << endl;
+	sol[indexa]->removeVertex(numVertex);
+//	cout << "2- size indexa : " << sol[indexa]->getSize() << endl;
+
+	// PROBLEM WITH REMOVE VERTEX OR TEMPINDEX 
+	/////////////////////////////////////////
+	/////////////////////////////////////////////
+	////////////////////////////////////////////
+	//////////////////////////////////////////
+	// 5 must not be printed, should be 1
+
+	for (int i = 0 ; i < sol[indexa]->getSize(); i++) {
+		cout << "  " << sol[indexa]->getGraph()[i]->getNum()<< endl;
+	}
 	//iterative verification - find a correct graph b
 	for (int i = 0; i < sol.size(); i++) {
-		if (sol[i]->canBeAdded(numVertex)) {
+		if (sol[i]->canBeAdded(numVertex) && i!=indexa) {
 			indexb = i;
 			break;
 		}
@@ -124,25 +141,30 @@ void Solution::moveVertex(int numVertex) {
 	if (indexb == -1) {
 		cout << " WARNING : CHECK moveVertex method into Solution class" << endl;
 	}
-	// add into another graph b
+
 	cout << "graph a : " << indexa << endl;
 	cout << "graph b : " << indexb << endl;
+/*	cout << "index graph(1)" << indexGraph(1) << endl;
+	cout << "A2 res is into 1 : " << isInto(1) << endl;*/
+	// add into another graph b
+
 	sol[indexb]->addVertex(toMove);
 	//sol[indexb]->printGraph();
 	// if graph a size = 0, remove it
 	if (sol[indexa]->getSize() == 0) {
+	//	cout << "REMOVE" << endl;
 		removeGraph(indexa);
 	}
 
 	// verif of graph a size (same as below)	
 	// verification of graph b size compare to his neighbors -> if not ok, find the right index and swap
+	if (!rightPlace(indexb)) {
+		cout << "MOVE IT B : " << indexPlace(indexb)  << endl;
+		swapGraph(indexb, indexPlace(indexb));
+	}
 	if (!rightPlace(indexa)) {
 		cout << "MOVE IT A : " << indexPlace(indexa) << endl;
 		swapGraph(indexa, indexPlace(indexa));
-	}
-	if (!rightPlace(indexb)) {
-		cout << "MOVE IT B" << endl;
-		swapGraph(indexb, indexPlace(indexb));
 	}
 }
 

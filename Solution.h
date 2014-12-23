@@ -2,6 +2,8 @@
 #define SOLUTION_H
 
 #include "Graph.h"
+#include <cstdlib>
+
 
 class Solution {
 	private:
