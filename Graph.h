@@ -16,11 +16,16 @@ class Graph {
 		Graph();
 		Graph(string filename);
 		Graph(const Graph& g);
+		~Graph();
 		vector<Vertex*> getGraph();
 		void addVertex(Vertex * v);
-		void removeVertex(Vertex v);
+		void removeVertex(int v);
 		int getSize();
 		vector<string> tokenize(string toSplit, string token);
+		void printGraph();
+		bool vertexIsInto(int n) ;
+		int getIndexVertex(int n);
+		bool canBeAdded(int n);
 };
 
 #endif

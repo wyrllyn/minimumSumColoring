@@ -5,8 +5,12 @@ Solver::Solver(string filename) : completeGraph(filename){
 	fileN = filename;
 	solu = Solution();
 	solu.initialisation(completeGraph);
-	cout<< solu.getSol().size() << endl;
-	cout << solu.cost() << endl;
+	
+}
+
+Solver::~Solver() {
+	/*solu.~Solution();
+	completeGraph.~Graph();*/
 }
 
 
@@ -45,6 +49,23 @@ void Solver::test() {
 		cout << "error" << endl;
 	}
 	*/
-	cout << solu.solutionOk(completeGraph) << endl;
+	//cout << solu.solutionOk(completeGraph) << endl;
+	//completeGraph.printGraph();
+
+	cout<< "colors k = "  <<solu.getSol().size() << endl;
+	cout<< "sum = " << solu.cost() << endl;
+
+	solu.moveVertex(5);
+	solu.printSizes();
+	solu.moveVertex(4);
+	solu.printSizes();
+	solu.moveVertex(28);
+	solu.printSizes();
+	solu.moveVertex(105);
+	solu.printSizes();
+	// PROBLEM UNDER : MISSING NODES ? oO
+	solu.moveVertex(5);
+	solu.printSizes();
+	solu.solutionOk(completeGraph);
 
 }

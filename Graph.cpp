@@ -12,6 +12,13 @@ Graph::Graph(const Graph& g) : size(g.size) {
     }
 }
 
+Graph::~Graph(){
+    for (int i = 0; i < graph.size(); i++) {
+        graph[i]->~Vertex();
+    }
+
+}
+
 Graph::Graph(string filename) {
 	//TODO: implement it
 	ifstream file(filename.c_str(), ios::in); 
@@ -81,10 +88,10 @@ void Graph::addVertex(Vertex * v) {
 
 
 //TODO: test
-void Graph::removeVertex(Vertex v) {
+void Graph::removeVertex(int v) {
 	int index = 0;
 	for (int i = 0; i < graph.size(); i++) {
-		if (v.getNum() == graph[i]->getNum()) {
+		if (v == graph[i]->getNum()) {
 			index = i;
 			break;
 		}
@@ -95,4 +102,38 @@ void Graph::removeVertex(Vertex v) {
 
 int Graph::getSize() {
 	return graph.size();
+}
+
+void Graph::printGraph() {
+    for (int i = 0 ; i < graph.size(); i++) {
+        cout << graph[i]->getNum() << " ";
+    }
+    cout << endl;
+}
+
+bool Graph::vertexIsInto(int n) {
+    for (int i = 0; i < graph.size() ; i++) {
+        if (graph[i]->getNum() == n) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int Graph::getIndexVertex(int n) {
+    for (int i = 0; i < graph.size(); i++) {
+        if (graph[i]->getNum() == n) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+bool Graph::canBeAdded(int n) {
+    for (int i = 0; i < graph.size(); i++) {
+        if (graph[i]->isLinked(n)) {
+            return false;
+        }
+    }
+    return true;
 }

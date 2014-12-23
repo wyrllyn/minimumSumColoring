@@ -10,6 +10,7 @@ class Solver {
 		string fileN;
 	public:
 		Solver(string filename);
+		~Solver();
 		Graph getCompleteGraph();
 		Solution getSolu();
 		void test();
