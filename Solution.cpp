@@ -1,28 +1,124 @@
 #include "Solution.h"
 
-Solution::Solution(){
+///////////////////////////////////////////////////
+///// CONSTRUCTORS & DESTRUCTORS////////////////////
+///////////////////////////////////////////////////
 
+Solution::Solution(){
+	cout << " new sol" << endl;
 }
+
+// TODO : verif
+Solution::Solution(const Solution& s) : sol(s.sol.size()) {
+
+		
+	for (int i = 0; i < s.sol.size(); i++) {
+		//cout << "SOL " << i << " graph size = " << s.sol[i].size() << endl;
+		//for (std::size_t i = 0; i < s.sol.size() ; i++ ) {
+			sol[i] = new Graph(*s.sol[i]);
+		//	cout << "SOL " << i << " graph size = " << s.sol[i]->getGraph().size() << endl;
+		//}
+	}
+	costSol = s.costSol;
+}
+
+//for (std::size_t i = 0; i < orig.data.size(); ++i)
+        //data[i] = new A(*orig.data[i]);
+//
+
+
+Solution::~Solution() {
+	while(!sol.empty()) {
+		if(sol.back() != NULL)
+			delete sol.back();
+		sol.pop_back();
+	}
+}
+
+//////////////////////////////////
+//// GETTER /////////////////////
+////////////////////////////////
 
 vector<Graph *> Solution::getSol() {
 	return sol;
 }
 
-Solution::Solution(const Solution& s) {
+float Solution::getCostSol() {
+	return costSol;
+}
 
-	for (int i = 0; i < s.sol.size(); i++) {
-		Graph * g = new Graph(*s.sol[i]);
-		addGraph(g);
+///////////////////////////////
+///// ADD & REMOVE GRAPH //////
+///////////////////////////////
+
+void Solution::addGraph(Graph * g) {
+	sol.push_back(g);
+}
+
+//uses an index
+void Solution::removeGraph(int g) {
+	//delete sol[g];
+	//sol[g]->~Graph();
+	delete sol[g];
+	sol.erase(sol.begin()+g);
+}
+
+/////////////////////////////
+///////// SWAP GRAPH ////////
+/////////////////////////////
+
+//TODO check
+void Solution::swapGraph(int index1, int index2) {
+/*	Graph * g = new Graph(*sol[index1]);
+
+	Graph * g2 = new Graph(*sol[index2]);
+	sol[index1] = g2;
+
+	sol[index2] = g;
+*/
+
+	swap(sol[index1], sol[index2]);
+
+}
+
+int Solution::indexGraph(int numVertex) {
+	int index = -1;
+	for (int i = 0 ; i < sol.size(); i++) {
+		if (sol[i]->vertexIsInto(numVertex)) {
+			return i;
+		}
+	}
+	return index;
+}
+
+void Solution::initialisation(Graph * g) {
+	cout << "init" << endl;
+	for (int i = 0; i < g->getSize(); i++) {
+		Graph* tempGraph = new Graph();
+		tempGraph->addVertex(g->getGraph()[i]);
+		addGraph(tempGraph);
+	}
+	costSol = cost();
+}
+
+////////////////////////////////////////////////////
+////// ORDER ////////////////////////////////////
+////////////////////////////////////////////////////
+
+void Solution::order() {
+	for (int i = 0; i < sol.size() - 1; i++) {
+		for (int j = i+1 ; j < sol.size(); j++) {
+			if(sol[i]->getSize() < sol[j]->getSize()) {
+				swapGraph(i,j);
+			}
+		}
 	}
 }
 
-Solution::~Solution() {
-/*	for (int i = 0; i < sol.size(); i++) {
-		cout << "i = " << i << endl;
-		sol[i]->~Graph();
-	}*/
-}
 
+////////////////////////////////////////////////////////
+//// EVAL ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 int Solution::colors() {
 	return sol.size();
@@ -38,23 +134,8 @@ float Solution::cost() {
 	return toReturn;
 }
 
-void Solution::addGraph(Graph * g) {
-	sol.push_back(g);
-}
-
-void Solution::removeGraph(int g) {
-	sol.erase(sol.begin()+g);
-}
-
-// CHECK
-void Solution::initialisation(Graph g) {
-	for (int i = 0; i < g.getSize(); i++) {
-
-		Graph* tempGraph = new Graph();
-		tempGraph->addVertex(g.getGraph()[i]);
-		addGraph(tempGraph);
-	}
-}
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
 
 //TODO: test
 // used to know if a vertex (num) is into sol
@@ -70,117 +151,75 @@ bool Solution::isInto(int num) {
 	return false;
 }
 
-// used to know if all vertices are in Solution and for the cardinality 
+
+////////////////////////////////////////////////////////////
+// VALIDITY /////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
 bool Solution::solutionOk(Graph g) {
+	bool toReturn = true;
 	for (int i = 0; i < g.getSize(); i++) {
 		if (!isInto(g.getGraph()[i]->getNum())){
 			cerr << "F1: missing Node(s) : " << g.getGraph()[i]->getNum() <<endl;
-			return false;
+			toReturn = false;
 		}
 	}
 	for (int i = 0; i < sol.size() - 1 ; i++) {
 		for (int j = i+1; j < sol.size() ; j++ ) {
 			if (sol[i]->getSize() < sol[j]->getSize()) {
 				cout << "F2: cardinality not respected" <<endl;
-				return false;
+				toReturn =  false;
 			}
 		}
 	}
-	cout << "TRUE" <<endl;
+
+	return toReturn;
+}
+
+bool Solution::testGraphsValidity() {
+	for (int i = 0; i < sol.size(); i++) {
+		for (int j = 0; j < sol[i]->getGraph().size(); j++) {
+			for (int k = 0; k < sol[i]->getGraph().size(); k++) {
+				if ( sol[i]->getGraph()[j]->isLinked(sol[i]->getGraph()[k]->getNum()) && (j != k)) {
+					cout << "TEST GRAPHS VALIDITY = FALSE" << endl;
+					cout << sol[i]->getGraph()[k]->getNum() << " and " << sol[i]->getGraph()[j]->getNum() << endl;
+					return false;
+				}
+			}
+		}
+	}
+	cout << "TEST GRAPHS VALIDITY = TRUE" << endl;
 	return true;
 }
 
-void Solution::swapGraph(int index1, int index2) {
-	Graph * g = new Graph(*sol[index1]);
+/////////////////////////////////////////////////////////////
+////                     MOVES                 /////////////
+///////////////////////////////////////////////////////////
 
-	Graph * g2 = new Graph(*sol[index2]);
-	sol[index1] = new Graph(*g2);
-
-	sol[index2] = new Graph(*g);
-
-}
-
-int Solution::moveVertex(int numVertex) {
-
-	// remove from appropriate graph a
-	int indexa= indexGraph(numVertex);
-	int indexb = -1;
-	//cout << "index a" << indexa << endl;
-	int tempIndex = sol[indexa]->getIndexVertex(numVertex);
-	Vertex * toMove = new Vertex(*sol[indexa]->getGraph()[tempIndex]);
-		//cout << toMove->getNum() << " = tomove " << endl;
-	// remove
-		/*cout << "verif sizes :" << endl;
-		cout << sol[indexa]->getSize() << endl;*/
-/*	cout << "A res is into 1 : " << isInto(1) << endl;
-	cout << "index graph(1)" << indexGraph(1) << endl;
-	cout << " temp index : " << tempIndex << endl;
-	cout << "num to Move : " << toMove->getNum() << endl;*/
-//	cout << "1 -size indexa : " << sol[indexa]->getSize() << endl;
-	sol[indexa]->removeVertex(numVertex);
-//	cout << "2- size indexa : " << sol[indexa]->getSize() << endl;
-
-/*	for (int i = 0 ; i < sol[indexa]->getSize(); i++) {
-		cout << "  " << sol[indexa]->getGraph()[i]->getNum()<< endl;
-	}*/
-	//iterative verification - find a correct graph b
-	for (int i = 0; i < sol.size(); i++) {
-		if (sol[i]->canBeAdded(numVertex) && i!=indexa) {
-			indexb = i;
-			break;
-		}
-	}
-	if (indexb == -1) {
-		//cout << " WARNING : CHECK moveVertex method into Solution class" << endl;
-		sol[indexa]->addVertex(toMove);
-		return 0;
-	}
-
-//	cout << "graph a : " << indexa << endl;
-//	cout << "graph b : " << indexb << endl;
-/*	cout << "index graph(1)" << indexGraph(1) << endl;
-	cout << "A2 res is into 1 : " << isInto(1) << endl;*/
-	// add into another graph b
-
-	sol[indexb]->addVertex(toMove);
-	//sol[indexb]->printGraph();
-	// if graph a size = 0, remove it
-	if (sol[indexa]->getSize() == 0) {
-	//	cout << "REMOVE" << endl;
-		removeGraph(indexa);
-	}
-
-	// verif of graph a size (same as below)	
-	// verification of graph b size compare to his neighbors -> if not ok, find the right index and swap
-	if (!rightPlace(indexb) || !rightPlace(indexa)) {
-		order();
-	}
-	return 1;
-}
-
-int Solution::indexGraph(int numVertex) {
-	int index = -1;
-	for (int i = 0 ; i < sol.size(); i++) {
-		if (sol[i]->vertexIsInto(numVertex)) {
-			return i;
-		}
-	}
-	return index;
-}
 
 bool Solution::rightPlace(int index) {
+
+//	cout << "calling right place" << endl;
+//	cout << "--------- index = " << index<< "sol size is of " << sol.size()  << endl;
+//	cout << "sol size is of " << sol.size() << endl;
 	if(index == 0) {
+
+		//	cout << "here 1" << endl;
 		if(sol[index]->getSize() >= sol[index + 1]->getSize() ) {
 			return true;
 		}
 	}
-	else if (index == sol.size() - 1) {
-		if (sol[index]->getSize()  <= sol[index-1]->getSize() ) {
+	else if (index == sol.size() - 1 || index == sol.size() ) {
+
+	//		cout << "here 2" << endl;
+		if (sol[sol.size() - 1]->getSize()  <= sol[sol.size() - 2]->getSize() ) {
 			return true;
 		}
 	}
 	else {
-		if (sol[index]->getSize()  <= sol[index-1]->getSize() && sol[index]->getSize()  >= sol[index+1]->getSize() ) {
+	//	cout << "here 3" << endl;
+	//	cout << sol[index]->getSize() <<" <= " << sol[index-1]->getSize() << endl;
+		if (sol[index]->getSize() <= sol[index-1]->getSize() && sol[index]->getSize() >= sol[index+1]->getSize() ) {
 			return true;
 		}
 	}
@@ -221,23 +260,72 @@ int Solution::indexPlace(int index) {
 			return 0;
 		}
 	}
-
 	return -1;
 }
 
-void Solution::printSizes() {
-	for (int i = 0; i < sol.size(); i++) {
-		cout << " " << sol[i]->getSize();
-	}
-	cout << endl;
-}
 
-void Solution::order() {
-	for (int i = 0; i < sol.size() - 1; i++) {
-		for (int j = i+1 ; j < sol.size(); j++) {
-			if(sol[i]->getSize() < sol[j]->getSize()) {
-				swapGraph(i,j);
-			}
+int Solution::moveVertex(int numVertex) {
+	float oldCost = costSol;
+	// remove from appropriate graph a
+	int indexa = indexGraph(numVertex);
+	int indexb = -1;
+
+//	cout << "sol size at the beggining of move vertex " << sol.size() << endl;
+
+	int tempIndex = sol[indexa]->getIndexVertex(numVertex);
+	Vertex * toMove = new Vertex(*sol[indexa]->getGraph()[tempIndex]);
+
+
+	sol[indexa]->removeVertex(numVertex);
+
+	//iterative verification - find a correct graph b
+	for (int i = 0; i < sol.size(); i++) {
+		if (sol[i]->canBeAdded(numVertex) && i!=indexa) {
+			indexb = i;
+			break;
 		}
+	/*	if (sol[i]->canBeAdded(*toMove) && sol[i]->canBeAdded(numVertex)  && i!=indexa) {
+			indexb = i;
+			break;
+		} */
 	}
+
+
+	if (indexb == -1) {
+		//cout << " WARNING : CHECK moveVertex method into Solution class" << endl;
+		sol[indexa]->addVertex(toMove);
+		return 0;
+	}
+
+	
+
+	sol[indexb]->addVertex(toMove);
+
+
+
+	// if graph a size = 0, remove it
+	if (sol[indexa]->getSize() == 0) {
+		removeGraph(indexa);		
+	}
+
+//	cout << "INTO MOVE" << endl;
+//	cout << indexa << " " << indexb << endl;
+//	cout << indexb << " " << indexa << " size sol is " << sol.size() << endl;
+
+	// verif of graph a size (same as below)	
+	// verification of graph b size compare to his neighbors -> if not ok, find the right index and swap
+	if (!rightPlace(indexb) || !rightPlace(indexa)) {
+	//	cout << "before order calls" << endl;
+		order();
+	}
+
+	//cout << "INTO MOVE 2" << endl;
+
+	costSol = cost();
+
+	if (costSol >= oldCost) {
+		return -1;
+	}
+
+	return 1;
 }

@@ -1,75 +1,72 @@
 #include "Solver.h"
 
-// TODO: init solu
-Solver::Solver(string filename) : completeGraph(filename){
-	fileN = filename;
-	solu = Solution();
-	solu.initialisation(completeGraph);
-	
+
+Solver::Solver(string f) {
+	file = f;
+	baseGraph = new Graph(f);
+	solution = new Solution();
+	solution->initialisation(baseGraph);
+}
+
+Graph * Solver::getGraph() {
+	return  baseGraph;
 }
 
 Solver::~Solver() {
-	/*solu.~Solution();
-	completeGraph.~Graph();*/
+	delete baseGraph;
+	//delete solution;
 }
 
+void Solver::solve_1() {
+	Solution * newSol = new Solution(*solution);
+	float currentCost = solution->getCostSol();
+	int newCost = 0;
+	vector<int> checked;
+	cout << "init cost : " << solution->cost() << " " << solution->colors() << " colors" << endl;
 
-Graph Solver::getCompleteGraph() {
-	return completeGraph;
-}
-
-Solution Solver::getSolu() {
-	return solu;
-}
-
-void Solver::test() {
-	/*
-	//// Graph copy
-	Graph * g = new Graph(completeGraph);
-	if (g->getSize() != completeGraph.getSize()) {
-		cout << "error 1 " << endl;
-	}
-	for (int i = 0; i < completeGraph.getSize(); i++) {
-		if (g->getGraph()[i]->getEdges().size() != completeGraph.getGraph()[i]->getEdges().size()) {
-			cout << "error 2 " << endl;
+	while(checked.size() < newSol->getSol().size()) {
+		cout << checked.size() << endl;
+		cout << "last cost " << solution->getCostSol()<< " " << solution->colors() << " colors" << endl;
+		checked.clear();
+		for (int i = newSol->getSol().size(); i > 0 ; i-- ) {
+			//cout << "LOOP " << i << endl;
+			int tmp = newSol->moveVertex(i);
+			//cout << " tmp = " << tmp << endl;
+			if ( tmp == 1) {
+				//cout << "test" << endl;
+				solution = new Solution(*newSol);
+				currentCost = newCost;
+			}
+			else if (tmp == -1) {
+				newSol = new Solution(*solution);
+				checked.push_back(i);
+			}
+			else {
+				checked.push_back(i);
+			}
+			//cout << "------- end i " << endl;
 		}
-		if (g->getGraph()[i]->getNum() != completeGraph.getGraph()[i]->getNum()) {
-				cout << "error 3 " << endl;
-		}
-		for (int j = 0; j < completeGraph.getGraph()[i]->getEdges().size(); j++) {
-			if (completeGraph.getGraph()[i]->getEdges()[j] != g->getGraph()[i]->getEdges()[j]) {
-				cout << "error 4 " << endl;
-			}			
 
-		}
-	}
-	//// Solution copy
-	Solution * s = new Solution(solu);
-	if (s->getSol().size() != solu.getSol().size()) {
-		cout << "error" << endl;
-	}
-	*/
-	//cout << solu.solutionOk(completeGraph) << endl;
-	//completeGraph.printGraph();
-	//srand(time(NULL));
-
-	cout<< "colors k = "  <<solu.getSol().size() << endl;
-	cout<< "sum = " << solu.cost() << endl;
-
-	for (int i = 0; i < 5000 ; i++) {
-		int random = rand() % completeGraph.getSize() + 1 ;
-	//	cout << "i= " << i <<  " rand = " << random << endl;
-		if (solu.moveVertex(random) == 0) {
-			cout << "i = " << i << endl;
-			break;
-		}
-		//solu.printSizes();
-		//solu.solutionOk(completeGraph);
 	}
 
-	solu.solutionOk(completeGraph);
-	solu.printSizes();
-	cout<< "colors k = "  <<solu.getSol().size() << endl;
-	cout<< "sum = " << solu.cost() << endl;
 
+//	solution->~Solution();
+//	cout << "last cost : " << solution->cost() << " " << solution->colors() << " colors" << endl;
+//	cout << " new cost " << newSol->cost() << endl;
+	
+
+	solution->solutionOk(*baseGraph);
+	solution->testGraphsValidity();
+
+	cout << "last cost " << solution->getCostSol() << endl;
+	cout << "last cost : " << solution->cost()   << " " << solution->colors() << " colors" << endl;
+/*	 for (int i = 0; i < newSol->getSol().size() ; i++ ) {
+	 	cout << i << endl;
+	 	cout << "loop : "<< i << " size = " << newSol->getSol()[i]->getGraph()[0]->getEdges().size() << endl;
+	 	cout << "vertex is " << newSol->getSol()[i]->getGraph()[0]->getNum() << endl;
+	 	cout << "vertex is " << solution->getSol()[i]->getGraph()[0]->getNum() << endl;
+	 } */
+
+
+	delete newSol;
 }

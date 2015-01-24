@@ -13,19 +13,32 @@ class Graph {
 		vector<Vertex*> graph;
 		int size;
 	public:
+
+		// Constructors & destructor
 		Graph();
 		Graph(string filename);
 		Graph(const Graph& g);
 		~Graph();
+
+		//getters
+		int getSize();
 		vector<Vertex*> getGraph();
+
+		//insert or remove Vertex
 		void addVertex(Vertex * v);
 		void removeVertex(int v);
-		int getSize();
-		vector<string> tokenize(string toSplit, string token);
-		void printGraph();
+		
+
 		bool vertexIsInto(int n) ;
 		int getIndexVertex(int n);
-		bool canBeAdded(int n);
+		//bool canBeAdded(int n);
+		bool canBeAdded(Vertex v);
+
+		// just a print method
+		void printGraph();
+
+		//utils to parse // no need to be in class, check when refactor
+		vector<string> tokenize(string toSplit, string token);
 };
 
 #endif

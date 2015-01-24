@@ -5,15 +5,19 @@
 
 class Solver {
 	private:
-		Graph completeGraph;
-		Solution solu;
-		string fileN;
+		Graph * baseGraph;
+		string file;
+		Solution * solution;
 	public:
-		Solver(string filename);
+		Solver(string f);
 		~Solver();
-		Graph getCompleteGraph();
-		Solution getSolu();
-		void test();
+
+		Graph * getGraph();
+
+		void solve_1();
+		
+
+
 
 };
 
