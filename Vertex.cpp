@@ -10,14 +10,8 @@ Vertex::Vertex(int n) {
 	num = n;
 }
 
-Vertex::Vertex(const Vertex& v):num(v.num) {
-	// PROBLEM IN LAST CASE OF SOLUTION : CORRUPTED 
-	
-	for (int i = 0; i < v.edges.size(); i++) {
-		//cout << "vertex const " << i <<  " on vertex num " << v.num << endl;
-		addEdge(v.edges[i]);
-	}
-	//cout << "size is : " << v.edges.size() << endl;
+Vertex::Vertex(const Vertex& v):num(v.num), edges(v.edges){
+	//cout << "new Vertex " << num <<  endl;
 }
 
 

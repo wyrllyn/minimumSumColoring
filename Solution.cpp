@@ -5,17 +5,18 @@
 ///////////////////////////////////////////////////
 
 Solution::Solution(){
-	cout << " new sol" << endl;
+//	cout << " new sol" << endl;
 }
 
 // TODO : verif
 Solution::Solution(const Solution& s) : sol(s.sol.size()) {
-
+//	cout << "solution copy CONSTRUCTOR" << endl;
 		
 	for (int i = 0; i < s.sol.size(); i++) {
-		//cout << "SOL " << i << " graph size = " << s.sol[i].size() << endl;
+	//	cout << "SOL " << i << " graph size = " << s.sol.size() << endl;
 		//for (std::size_t i = 0; i < s.sol.size() ; i++ ) {
 			sol[i] = new Graph(*s.sol[i]);
+		//	cout << "done" << endl;
 		//	cout << "SOL " << i << " graph size = " << s.sol[i]->getGraph().size() << endl;
 		//}
 	}
@@ -29,8 +30,7 @@ Solution::Solution(const Solution& s) : sol(s.sol.size()) {
 
 Solution::~Solution() {
 	while(!sol.empty()) {
-		if(sol.back() != NULL)
-			delete sol.back();
+		delete sol.back();
 		sol.pop_back();
 	}
 }
@@ -100,7 +100,18 @@ void Solution::initialisation(Graph * g) {
 	}
 	costSol = cost();
 }
+/*
+void Solution::initialisation_2(Graph * g) {
+	cout << "init " << endl;
+	vector<int> numbers;
+	int indRand = 0;
+	while( numbers.size() < g->getGraph().size() ) {
+		indRand = rand() % g->getGraph().size();
+		if (find(numbers.begin(), numbers.end(), &indRand) != numbers.end()) {
 
+		}
+	}
+}*/
 ////////////////////////////////////////////////////
 ////// ORDER ////////////////////////////////////
 ////////////////////////////////////////////////////
@@ -273,6 +284,8 @@ int Solution::moveVertex(int numVertex) {
 //	cout << "sol size at the beggining of move vertex " << sol.size() << endl;
 
 	int tempIndex = sol[indexa]->getIndexVertex(numVertex);
+
+//	cout << "here ?" << endl;
 	Vertex * toMove = new Vertex(*sol[indexa]->getGraph()[tempIndex]);
 
 
@@ -290,6 +303,7 @@ int Solution::moveVertex(int numVertex) {
 		} */
 	}
 
+//	cout << " index b is : " << indexb << endl;
 
 	if (indexb == -1) {
 		//cout << " WARNING : CHECK moveVertex method into Solution class" << endl;

@@ -2,6 +2,7 @@
 #define SOLVER_H
 
 #include "Solution.h"
+#include <cmath>
 
 class Solver {
 	private:
@@ -15,6 +16,10 @@ class Solver {
 		Graph * getGraph();
 
 		void solve_1();
+
+		void solve_2();
+
+		bool recuit(int T, float delta);
 		
 
 

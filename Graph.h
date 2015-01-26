@@ -19,6 +19,9 @@ class Graph {
 		Graph(string filename);
 		Graph(const Graph& g);
 		~Graph();
+		bool operator !=(const Graph &b) const ;
+		void copy(const Graph& g) ;
+	//	Graph operator =(const Graph & other);
 
 		//getters
 		int getSize();

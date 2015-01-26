@@ -32,6 +32,7 @@ class Solution {
 
 		// initialisation method
 		void initialisation(Graph * g);
+		void initialisation_2(Graph * g);
 
 		// orders graph for better eval
 		void order();
