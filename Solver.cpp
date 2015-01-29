@@ -5,7 +5,7 @@ Solver::Solver(string f) {
 	file = f;
 	baseGraph = new Graph(f);
 	solution = new Solution();
-	solution->initialisation(baseGraph);
+	//solution->initialisation_2(baseGraph);
 }
 
 Graph * Solver::getGraph() {
@@ -18,6 +18,10 @@ Solver::~Solver() {
 }
 
 void Solver::solve_1() {
+	cout << "LOCAL SEARCH w DESCENT" << endl;
+	int seed = time(NULL);
+	srand(seed);
+	solution->initialisation_3(baseGraph);
 	Solution * newSol = new Solution(*solution);
 	Solution * cSol = new Solution(*solution);
 	float currentCost = solution->getCostSol();
@@ -25,40 +29,27 @@ void Solver::solve_1() {
 	vector<int> checked;
 	cout << "init cost : " << solution->cost() << " " << solution->colors() << " colors" << endl;
 
-	while(checked.size() < newSol->getSol().size()) {
-	//	cout << "begin while" << endl;
-		cout << checked.size() << endl;
-		cout << "---- last cost into while " << cSol->getCostSol()<< " " << cSol->colors() << " colors" << endl;
+	while(checked.size() < baseGraph->getGraph().size()) {
+	//	cout << "---- last cost into while " << cSol->getCostSol()<< " " << cSol->colors() << " colors" << endl;
 		checked.clear();
-		for (int i = newSol->getSol().size(); i > 0 ; i-- ) {
-		//	cout << "LOOP " << i << endl;
-		//	
-			int tmp = newSol->moveVertex(i);
-		//	cout << "tmp " << tmp << endl;
-		//	cout << "end" << endl;
-			if ( tmp == 1 ) {
-				
+		for (int i = baseGraph->getGraph().size(); i > 0 ; i-- ) {
+			int tmp = newSol->moveVertex_2(i);
+			if ( tmp == 1 ) {				
 				delete cSol;
 				cSol = new Solution(*newSol);
-				
-				//solution->moveVertex(i);
-				
 			}
 			else if (tmp == -1) {
-			//	cout << "here" << endl;
 				delete newSol;
 				newSol = new Solution(*cSol);
-			//	cout << "yay" << endl;
 				checked.push_back(i);
 			}
 			else {
 				checked.push_back(i);
 			}
-		//	cout << "end for" << endl;
-		}
-		cout << "end while" << endl;
-
+		}		
+	//	cout << "not moved = " << checked.size() << endl;
 	}
+	cout << "seed was " << seed << endl;
 	cout << "check stuff" << endl;
 	solution->solutionOk(*baseGraph);
 	cout<< "CHECKING VALIDITY" << endl;
@@ -78,10 +69,14 @@ void Solver::solve_1() {
 
 
 void Solver::solve_2() {
+	cout << "LOCAL SEARCH w SIMULATED ANNEALING"<< endl;
+	int seed = time(NULL);
+	srand(seed);
+	solution->initialisation_3(baseGraph);
 	Solution * newSol = new Solution(*solution);
 	Solution * currentSol = new Solution(*solution);
 	Solution * bestSol = new Solution(*solution);
-	int temperature = 45;
+	float temperature = 1000;
 	float currentCost = solution->getCostSol();
 	int newCost = 0;
 	vector<int> checked;
@@ -89,25 +84,21 @@ void Solver::solve_2() {
 	float diff = 0;
 	int foundAt= 0;
 
-	srand(time(NULL));
-
 	int i;
-	for (int count = 0; count < 5000; count++) {
-		//if (count % 10 == 0)
-	//	cout << count << endl;
+	for (int count = 0; count < 100000; count++) {
 		i = rand() % baseGraph->getGraph().size() + 1;
-	//	cout << i << endl;
-		int tmp = newSol->moveVertex(i);
+		int tmp = newSol->moveVertex_2(i);
 		if (tmp == 1) {
-		//	currentSol
 			foundAt = count;
 			delete bestSol;
 			bestSol = new Solution(*newSol);
 			delete currentSol;
 			currentSol = new Solution(*newSol);
 		}
-		else {
+		else if (tmp == -1) {
 			diff = newSol->getCostSol() - currentSol->getCostSol();
+			//cout << "new cost" << newSol->getCostSol() << endl;
+			//cout << "current cost" << currentSol->getCostSol() << endl;
 			if(recuit(temperature, diff) == true ) {
 				delete currentSol;
 				currentSol = new Solution(*newSol);
@@ -116,10 +107,12 @@ void Solver::solve_2() {
 				delete newSol;
 				newSol = new Solution(*currentSol);
 			}
+			temperature*=0.99;
 		}
 	}
 
-	
+	cout << "temperature is " << temperature << endl;
+	cout << "seed was " << seed << endl;
 	cout<< "CHECKING VALIDITY" << endl;
 	solution->solutionOk(*baseGraph);
 	solution->testGraphsValidity();
@@ -137,15 +130,24 @@ void Solver::solve_2() {
 	delete bestSol;
 }
 
+void Solver::solve_3() {
+	Solution * newSol = new Solution();
+	newSol->initialisation(baseGraph);
 
-bool Solver::recuit(int T, float delta) {
+	cout<< "CHECKING VALIDITY" << endl;
+	solution->solutionOk(*baseGraph);
+	solution->testGraphsValidity();
+}
+
+bool Solver::recuit(float T, float delta) {
 	float temp = (rand() % 10 + 1) * 0.1;
+//	cout << "delta " << delta << endl;
 //	cout << "proba " << temp << endl;
 //	cout << "exp " <<  exp(-delta/T) << endl;
 	if (temp < exp(-delta/T) ) {
 	//	cout << false << endl;
-		return false;
+		return true;
 	}
 //	cout << true << endl;
-	return true;
+	return false;
 }

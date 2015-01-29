@@ -33,6 +33,7 @@ class Solution {
 		// initialisation method
 		void initialisation(Graph * g);
 		void initialisation_2(Graph * g);
+		void initialisation_3(Graph * g);
 
 		// orders graph for better eval
 		void order();
@@ -43,6 +44,7 @@ class Solution {
 		
 		//  ??
 		bool isInto(int num);
+		bool isIntoNumber(int num, vector<int> numbers);
 
 		// verif is sol is ok
 		bool solutionOk(Graph g);
@@ -51,6 +53,7 @@ class Solution {
 		
 		// move a vertex
 		int moveVertex(int numVertex);		
+		int moveVertex_2(int numVertex);	
 		bool rightPlace(int index);
 		int indexPlace(int index);
 

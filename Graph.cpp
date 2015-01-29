@@ -7,38 +7,9 @@ Graph::Graph() {
 
 
 Graph::Graph(const Graph& g) : size(g.size), graph(g.graph.size()) {
-/*    if ((g.graph == graph)) {
-      //  cout << "same" << endl;
-    }
-    else {
-     //   cout << "hey" << endl;
-        while(!graph.empty()) {
-            delete graph.back();
-            graph.pop_back();
-        }
-       // graph.reserve(g.graph.size());
-        for (int i = 0; i < g.graph.size(); i++) {
-       //     cout << "test" << endl;
-            graph.push_back(g.graph[i]);
-        }
-     //   for(int i = 0; i < g.graph.size(); i++) {
-         //   if (graph[i] == NULL) {
-     //           graph[i] = new Vertex(*g.graph[i]);
-           /* }
-            else {*/
-               // cout << "hey null" << endl;
-           //     graph[i] = g.graph[i];
-          //  }
-               
-      //  }
-  //  graph.reserve(g.graph.size());
     for (int i = 0; i < g.graph.size(); i++) {
-    //    cout << "graph --------" << i << " on " << g.graph.size() << endl;
-     //   cout << g.graph[i]->getNum() << endl;
         graph[i] = new Vertex(*g.graph[i]);
-     //   cout << "done in graph const" << endl;
     }
- //   cout << "DONE" << endl;
 }
 
 void Graph::copy(const Graph& g) {
@@ -96,7 +67,6 @@ Graph::Graph(string filename) {
         	}
         }       
         file.close();
-        cout << "DONE : " << size << endl;
     }
     else {
    		cerr << "Could not open file" << endl;
@@ -104,15 +74,10 @@ Graph::Graph(string filename) {
 }
 
 Graph::~Graph(){
-   // cout << " calling graph destructor" << endl;
-   /* for (int i = 0; i < graph.size(); i++) {
-       delete graph[i]/*->~Vertex()*/;
-    //}
     while(!graph.empty()) {
         delete graph.back();
         graph.pop_back();
     }
-   // cout << "is the segfault there ?" << endl;
 }
 
 bool Graph::operator !=(const Graph &b) const {
@@ -192,10 +157,7 @@ bool Graph::canBeAdded(Vertex v) {
 //////////////////
 
 int Graph::getIndexVertex(int n) {
-  //  cout << "into get getIndexVertex" << endl;
-   // cout << "graph size " << graph.size() << endl;
     for (int i = 0; i < graph.size(); i++) {
-      //  cout << "------------------- i = " << i << endl;
         if (graph[i]->getNum() == n) {
             return i;
         }

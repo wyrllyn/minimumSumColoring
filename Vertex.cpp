@@ -11,7 +11,6 @@ Vertex::Vertex(int n) {
 }
 
 Vertex::Vertex(const Vertex& v):num(v.num), edges(v.edges){
-	//cout << "new Vertex " << num <<  endl;
 }
 
 
@@ -37,7 +36,6 @@ bool Vertex::isLinked(int n) {
 }
 
 Vertex::~Vertex() {
-	//std::cout << "bye vertex" << std::endl;
 	while(!edges.empty()) {
 		edges.pop_back();
 	}

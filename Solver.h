@@ -19,7 +19,9 @@ class Solver {
 
 		void solve_2();
 
-		bool recuit(int T, float delta);
+		void solve_3();
+
+		bool recuit(float T, float delta);
 		
 
 

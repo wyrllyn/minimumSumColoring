@@ -13,12 +13,7 @@ int main (int argc, char ** argv) {
 	begin = clock();
 
 	Solver solve = Solver(file);
-	solve.solve_2();
-	//cout << solve.getGraph()->getIndexVertex(5) << endl;
-//	solve.getGraph()->removeVertex(5);
-	//cout << "can be added 5" << solve.getGraph()->canBeAdded(5);
-//	cout << solve.getGraph()->getIndexVertex(5) << endl;
-	//solve.getGraph()->printGraph();
+	solve.solve_1();
 
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;

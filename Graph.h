@@ -21,7 +21,6 @@ class Graph {
 		~Graph();
 		bool operator !=(const Graph &b) const ;
 		void copy(const Graph& g) ;
-	//	Graph operator =(const Graph & other);
 
 		//getters
 		int getSize();
