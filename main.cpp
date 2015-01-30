@@ -3,7 +3,7 @@
 #include "Solver.h"
 
 int main (int argc, char ** argv) {
-	string file = "files/dsjc1000.9.col";
+	string file = "files/dsjc250.5.col";
 	if (argc > 1) {
 			file = argv[1];
 	}
@@ -13,7 +13,7 @@ int main (int argc, char ** argv) {
 	begin = clock();
 
 	Solver solve = Solver(file);
-	solve.solve_1();
+	solve.solve_2();
 
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;

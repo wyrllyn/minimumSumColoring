@@ -85,7 +85,9 @@ void Solver::solve_2() {
 	int foundAt= 0;
 
 	int i;
-	for (int count = 0; count < 100000; count++) {
+	for (int count = 0; count < 500000; count++) {
+		/*if (count % 10000 == 0)
+			cout << count << endl;*/
 		i = rand() % baseGraph->getGraph().size() + 1;
 		int tmp = newSol->moveVertex_2(i);
 		if (tmp == 1) {
