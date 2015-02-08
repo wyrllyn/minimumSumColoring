@@ -3,9 +3,13 @@
 #include "Solver.h"
 
 int main (int argc, char ** argv) {
-	string file = "files/dsjc250.5.col";
+	int method = 2;
+	string file = "files/dsjc1000.9.col";
 	if (argc > 1) {
 			file = argv[1];
+			if (argc > 2) {
+				method = atoi(argv[2]);
+			}
 	}
 
 	clock_t begin, end;
@@ -13,7 +17,10 @@ int main (int argc, char ** argv) {
 	begin = clock();
 
 	Solver solve = Solver(file);
-	solve.solve_2();
+	if (method == 1)
+		solve.solve_1();
+	else 
+		solve.solve_2();
 
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;

@@ -54,6 +54,7 @@ class Solution {
 		// move a vertex
 		int moveVertex(int numVertex);		
 		int moveVertex_2(int numVertex);	
+		int new_moveVertex_2(int numVertex) ;
 		bool rightPlace(int index);
 		int indexPlace(int index);
 

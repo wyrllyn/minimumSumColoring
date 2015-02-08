@@ -394,6 +394,73 @@ int Solution::moveVertex_2(int numVertex) {
 	return 1;
 }
 
+int Solution::new_moveVertex_2(int numVertex){
+	float oldCost = costSol;
+	// remove from appropriate graph a
+	int indexa = indexGraph(numVertex);
+	int indexb = -1;
+
+	bool wasNotAlone = true;
+
+	bool found = false;
+	vector<int> numbers;
+
+	int tempIndex = sol[indexa]->getIndexVertex(numVertex);
+	Vertex * toMove = new Vertex(*sol[indexa]->getGraph()[tempIndex]);
+
+	if (sol[indexa]->getGraph().size() < 2) wasNotAlone == false;
+	sol[indexa]->removeVertex(numVertex);
+
+	// set indexb, with random and verification
+	while(!found && !isIntoNumber(indexb, numbers) && (numbers.size() < sol.size())) {
+		// if wasNotAlone => value_rand + 1
+		// if indexb = max_value_rand + 1
+			// create new graph at indexb + found = true
+		if (wasNotAlone) {
+			indexb = rand() % (sol.size() + 1);
+		} else {
+			indexb = rand() % sol.size();
+		}
+		if (indexb == sol.size()) {
+			Graph* tempGraph = new Graph();
+				//tempGraph->addVertex(temp_v);
+			addGraph(tempGraph);
+
+			found = true;
+			break;
+
+		} else if (indexb != indexa && sol[indexb]->canBeAdded(numVertex)) {
+			found = true;
+			break;
+		}
+		numbers.push_back(indexb);
+	}
+	if (!found) {
+		sol[indexa]->addVertex(toMove);
+		return 0;
+	}	
+	sol[indexb]->addVertex(toMove);
+
+	// if graph a size = 0, remove it
+	if (sol[indexa]->getSize() == 0) {
+		removeGraph(indexa);		
+	};
+
+	// verif of graph a size (same as below)	
+	// verification of graph b size compare to his neighbors -> if not ok, find the right index and swap
+	if (!rightPlace(indexb) || !rightPlace(indexa)) {
+		order();
+	}
+
+	costSol = cost();
+
+	if (costSol >= oldCost) {
+		return -1;
+	}
+
+	return 1;
+}
+
 bool Solution::isIntoNumber(int num, vector<int> numbers) {
 	for (int i = 0; i < numbers.size(); i++ ) {
 		if (numbers[i] == num)
